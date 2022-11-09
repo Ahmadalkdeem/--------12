@@ -55,15 +55,6 @@ export class Utils {
 }
 console.log(Utils.random(10, 20));
 import { Rectangle } from "./color.js";
-// const rect1 = new Rectangle(100, 10);
-// console.log(rect1);
-/////////////////
-/////////////////
-/////////////////
-/////////////////
-/////////////////
-/////////////////
-/////////////////
 const rectHeightInput = document.getElementById("rect-height");
 const rectWidthInput = document.getElementById("rect-width");
 const rectDrawButton = document.getElementById("btn-draw");
@@ -83,12 +74,78 @@ rectDrawButton.addEventListener("click", () => {
     rectDiv.addEventListener("click", (e) => {
         rectDiv.remove();
         console.log(rectDiv);
+        let index = rectangles.findIndex(b => b.timeStamp === rect.timeStamp);
+        rectangles.splice(index, 1);
+        localStorage.setItem("rectangles", JSON.stringify(rectangles));
     });
     //add the box div:
     rectBoxDiv.appendChild(rectDiv);
     rectangles.push(rect);
     localStorage.setItem("rectangles", JSON.stringify(rectangles));
 });
+function init() {
+    //null coallescing operator
+    const str = localStorage.getItem("rectangles") ?? "[]";
+    //JSON.parse(str) => any
+    //TS {}[]
+    const arrFromDisk = JSON.parse(str);
+    //Rectangle Objects (NOT Literal)
+    // arrFromDisk.forEach((o) => {
+    //   const rect = new Rectangle(o.width, o.height);
+    //   rect.timeStamp = o.timeStamp;
+    //   rectangles.push(rect);
+    // });
+    for (const o of arrFromDisk) {
+        const rect = new Rectangle(o.width, o.height);
+        rect.timeStamp = o.timeStamp;
+        // rectangles.push(rect);
+        const rectDiv = document.createElement("div");
+        rectDiv.style.backgroundColor = "blueviolet";
+        rectDiv.style.width = `${o.width}px`;
+        rectDiv.style.height = `${o.height}px`;
+        rectDiv.innerText = rect.toString();
+        rectDiv.addEventListener("click", () => {
+            rectDiv.remove();
+            //find the index of the current box in the rectnalges[] array
+            let index = rectangles.findIndex((b) => b.timeStamp === rect.timeStamp);
+            rectangles.splice(index, 1);
+            localStorage.setItem("rectangles", JSON.stringify(rectangles));
+        });
+        //add the box div:
+        rectBoxDiv.appendChild(rectDiv);
+        rectangles.push(rect);
+        localStorage.setItem("rectangles", JSON.stringify(rectangles));
+    }
+}
+init();
+class Personn {
+    name;
+    age;
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    static fromLiteral(p) {
+        return new Personn(p.name, p.age);
+    }
+}
+class user {
+    name;
+    age;
+    id;
+    constructor(name, age, id) {
+        this.name = name;
+        this.age = age;
+        this.id = id;
+    }
+    static fromLiteral(p) {
+        return new user(p.name, p.age, p.id);
+    }
+    toString() {
+        return `User: Email: ${this.name}, id: ${this.id}, age: ${this.age}`;
+    }
+}
+let p2 = user.fromLiteral({ name: "dave", age: 20, id: 123456789 });
 import { validators } from "./homework.js";
 import { Phone } from "./homework.js";
 const email = document.getElementById("email");

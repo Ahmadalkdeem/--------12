@@ -20,8 +20,7 @@ export class validators {
         }
     }
     static checkvalidname(username) {
-        let letters = /^[a-za-z]+$/;
-        if (username.length >= 3) {
+        if (username.length >= 3 && username.match(/[0-9]/) == null) {
             return true;
         }
         else {
@@ -38,4 +37,10 @@ export class Phone {
         this.lname = lname;
         this.numberr = numberr;
     }
+}
+if ("HellO".match(/hello/i)) {
+    console.log("Matches");
+}
+else {
+    console.log("Does not Match");
 }

@@ -63,18 +63,15 @@ export class Utils {
 }
 console.log(Utils.random(10, 20));
 
-import { Rectangle } from "./color.js";
 
 
-// const rect1 = new Rectangle(100, 10);
-// console.log(rect1);
-/////////////////
-/////////////////
-/////////////////
-/////////////////
-/////////////////
-/////////////////
-/////////////////
+
+
+
+
+
+
+import { Rectangle, RectangleType } from "./color.js";
 
 const rectHeightInput = document.getElementById(
   "rect-height"
@@ -100,6 +97,9 @@ rectDrawButton.addEventListener("click", () => {
   rectDiv.addEventListener("click", (e) => {
     rectDiv.remove();
     console.log(rectDiv);
+    let index = rectangles.findIndex(b => b.timeStamp === rect.timeStamp)
+    rectangles.splice(index, 1);
+    localStorage.setItem("rectangles", JSON.stringify(rectangles));
   });
 
   //add the box div:
@@ -107,6 +107,103 @@ rectDrawButton.addEventListener("click", () => {
   rectangles.push(rect);
   localStorage.setItem("rectangles", JSON.stringify(rectangles));
 });
+function init() {
+  //null coallescing operator
+  const str = localStorage.getItem("rectangles") ?? "[]";
+  //JSON.parse(str) => any
+  //TS {}[]
+  const arrFromDisk: RectangleType[] = JSON.parse(str);
+
+  //Rectangle Objects (NOT Literal)
+  // arrFromDisk.forEach((o) => {
+  //   const rect = new Rectangle(o.width, o.height);
+  //   rect.timeStamp = o.timeStamp;
+  //   rectangles.push(rect);
+  // });
+
+  for (const o of arrFromDisk) {
+    const rect = new Rectangle(o.width, o.height);
+    rect.timeStamp = o.timeStamp;
+    // rectangles.push(rect);
+    const rectDiv = document.createElement("div");
+    rectDiv.style.backgroundColor = "blueviolet";
+    rectDiv.style.width = `${o.width}px`;
+    rectDiv.style.height = `${o.height}px`;
+    rectDiv.innerText = rect.toString();
+
+    rectDiv.addEventListener("click", () => {
+      rectDiv.remove();
+      //find the index of the current box in the rectnalges[] array
+      let index = rectangles.findIndex((b) => b.timeStamp === rect.timeStamp);
+      rectangles.splice(index, 1);
+      localStorage.setItem("rectangles", JSON.stringify(rectangles));
+    });
+    //add the box div:
+    rectBoxDiv.appendChild(rectDiv);
+    rectangles.push(rect);
+    localStorage.setItem("rectangles", JSON.stringify(rectangles));
+
+
+  }
+
+}
+
+init();
+
+
+
+interface PersonType {
+  name: string;
+  age: number;
+  id: number;
+}
+
+class Personn {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+  static fromLiteral(p: PersonType) {
+    return new Personn(p.name, p.age);
+  }
+}
+class user {
+  name: string;
+  age: number;
+  id: number;
+  constructor(name: string, age: number, id: number) {
+    this.name = name;
+    this.age = age;
+    this.id = id;
+  }
+  static fromLiteral(p: PersonType) {
+    return new user(p.name, p.age, p.id);
+  }
+  toString() {
+    return `User: Email: ${this.name}, id: ${this.id}, age: ${this.age}`;
+  }
+
+}
+let p2 = user.fromLiteral({ name: "dave", age: 20, id: 123456789 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,7 +220,7 @@ const box = document.getElementById("box") as HTMLDivElement;
 const box1 = document.getElementById("box1") as HTMLDivElement;
 const box2 = document.getElementById("box2") as HTMLDivElement;
 const box3 = document.getElementById("box3") as HTMLDivElement;
-let myx = [];
+let myx: Phone[] = [];
 localStorage.getItem("myx");
 
 console.log(myx);

@@ -1,4 +1,9 @@
 import { Utils } from "./lec12.js";
+export interface RectangleType {
+  height: number;
+  width: number;
+  timeStamp: string;
+}
 
 export class Rectangle {
   height: number;
